@@ -1,9 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { Button, View, Text, TextInput, Image } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../stylesheet'
 
 const HomeScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
+  useEffect(() => {getData()}, [])
+
+  const getData = async () => {
+        try {
+          // the '@profile_info' can be any string
+          const value = await AsyncStorage.getItem('login')
+          if (value!=null) {
+            setUsername(value)
+            console.log('value exist')
+          } else {
+            console.log('value does not exist')
+
+          }
+
+
+        } catch(e) {
+          console.log("error in getData ")
+          console.dir(e)
+          // error reading value
+        }
+  }
+
   return (
     <View>
       <Button
@@ -20,10 +43,12 @@ const HomeScreen = ({ navigation }) => {
         }
       />
 
-      {
-        username &&  <Text> Hello, {username} </Text>
-      }
-
+      <Text> </Text>
+      <Text style = {{textAlign: 'center', fontSize: 20}}>
+        {
+          username &&  <Text> Hello, {username} </Text>
+        }
+      </Text>
 
     </View>
   );

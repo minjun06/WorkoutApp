@@ -27,7 +27,11 @@ const styles = StyleSheet.create({
     width: 100,
     borderColor: 'gray',
     borderWidth: 1
+  },
+  graphContainer: {
+    paddingHorizontal: 200
   }
+
 });
 
 export default styles

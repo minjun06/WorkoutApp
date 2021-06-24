@@ -13,7 +13,7 @@ const IndexScreen = ({ navigation, route }) => {
             title="Bench Press"
             color="#87CEEB"
             onPress={() =>
-              navigation.navigate('Input')
+              navigation.navigate('Input', {name: 'benchPress'})
             }
           />
           <Image
@@ -27,7 +27,7 @@ const IndexScreen = ({ navigation, route }) => {
             title="Dead Lift"
             color="#87CEEB"
             onPress={() =>
-              navigation.navigate('Input')
+              navigation.navigate('Input', {name: 'deadLift'})
             }
           />
           <Image
@@ -41,7 +41,7 @@ const IndexScreen = ({ navigation, route }) => {
             title="Squat"
             color="#87CEEB"
             onPress={() =>
-              navigation.navigate('Input')
+              navigation.navigate('Input', {name: 'squat'})
             }
           />
           <Image
