@@ -7,6 +7,7 @@ import Home from './components/home.js'
 import Login from './components/login.js'
 import Index from './components/index.js'
 import Input from './components/input.js'
+import SignUp from './components/signup.js'
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ const MyStack = () => {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Index" component={Index} />
         <Stack.Screen name="Input" component={Input} />
+        <Stack.Screen name="SignUp" component={SignUp} />
       </Stack.Navigator>
     </NavigationContainer>
   );

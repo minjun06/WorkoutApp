@@ -19,6 +19,13 @@ const HomeScreen = ({ navigation }) => {
 
           }
 
+          // Initialize signup_list
+          const signup_list = await AsyncStorage.getItem('signup_list')
+          if (signup_list===null) {
+            await AsyncStorage.setItem('signup_list', JSON.stringify([]))
+          }
+
+
 
         } catch(e) {
           console.log("error in getData ")

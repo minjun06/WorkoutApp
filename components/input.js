@@ -5,28 +5,78 @@ import { BarChart } from 'react-native-chart-kit';
 import styles from '../stylesheet'
 import uuidv4 from '../uuid'
 import ListItem from './listItem'
+import { max } from 'react-native-reanimated';
 
 
 
 const InputScreen = ({route, navigation }) => {
-  const [kg, setKg] = useState(0);
-  const [rep, setRep] = useState(0);
-  const [set, setSet] = useState(0);
-  const [date, setDate] = useState(0);
+  const [kg, setKg] = useState("");
+  const [rep, setRep] = useState("");
+  const [set, setSet] = useState("");
+  const [date, setDate] = useState("");
+
   const [todayData, setTodayData] = useState([]);
-  const tableHead = ['Date', 'KG', 'Rep', 'Set', 'Total Volume', 'Delete']
+
+  const [visDate, setVisDate] = useState([]);
+  const [visTotalVolume, setVisTotalVolume] = useState([]);
+
   const dataKey = `@${route.params.name}_data`;
-  useEffect(() => {getData()}, [])
+  useEffect(() => {initTodayData()}, [])
+
+  const initTodayData = () => {
+    getData().then((data) => {
+      // Initialize today data
+      let today = new Date()
+      let todayStr = `${today.getMonth()+1}/${today.getDate()}/${today.getFullYear()}`
+      setTodayData(data[todayStr])
+
+      // Initialize chart
+      loadChartData(data)
+    })
+  }
+
+  const getSortedTotalVolumeArr = (data) => {
+      let totalVolumeArr = []
+
+      // Calculate total volume
+      for(const [date, dataList] of Object.entries(data)) {
+        // Calculate total volume value
+        let totalVolume = 0
+        for(let i = 0; i < dataList.length; i++) {
+          totalVolume += dataList[i].volume
+        }
+        totalVolumeArr.push({date: new Date(date), volume: totalVolume, visDate: date})
+      }
+
+      // Sort total volume array
+      let sortedTotalVolumeArr = totalVolumeArr.sort((a, b) => a.date - b.date)
+
+      return sortedTotalVolumeArr
+  }
+
+  const loadChartData = (data) => {
+      let sortedTotalVolumeArr = getSortedTotalVolumeArr(data)
+      let arrLength = sortedTotalVolumeArr.length
+      const maxNumOfX = 5
+      let numOfX = Math.min(maxNumOfX, arrLength)
+
+      let visData = sortedTotalVolumeArr.slice(arrLength - numOfX, arrLength)
+      let visX = visData.map((oneTotalVolume) => oneTotalVolume.visDate)
+      let visY = visData.map((oneTotalVolume) => oneTotalVolume.volume)
+      setVisDate(visX)
+      setVisTotalVolume(visY)
+
+  }
 
   const getData = async () => {
         try {
-          // the '@profile_info' can be any string
           const jsonValue = await AsyncStorage.getItem(dataKey)
           let data = null
           if (jsonValue!=null) {
             data = JSON.parse(jsonValue)
-            setTodayData(data)
+            return data
           } else {
+            return {}
           }
 
 
@@ -54,10 +104,10 @@ const InputScreen = ({route, navigation }) => {
   );
 
   const data = {
-      labels: ["15 Jan", "17 Jan", "18 Jan", "25 Jan", "1 Feb", "2 Feb"],
+      labels: visDate,
       datasets: [
         {
-          data: [30, 45, 35, 60, 70, 75]
+          data: visTotalVolume,
         }
       ]
     };
@@ -83,11 +133,11 @@ const InputScreen = ({route, navigation }) => {
               <Text>Date: </Text>
               <TextInput
                 style={styles.myTextInput}
-                placeholder=""
+                placeholder="M/D/YYYY"
                 onChangeText={setDate}
                 value={date}
-              />
 
+              />
               <TextInput
                 style={styles.myTextInput}
                 placeholder="#"
@@ -115,22 +165,36 @@ const InputScreen = ({route, navigation }) => {
                    title={"Add"}
                    color="#87CEEB"
                    onPress = {() => {
-                     let data = {
-                       'date':date,
+                     let newData = {
+                       'date': date,
                        'kg':kg,
                        'rep':rep,
                        'set':set,
                        'volume':kg*rep*set,
                        'id':uuidv4()
                      }
-                     const newData=
-                       todayData.concat(data)
-                     setTodayData(newData)
-                     storeData(newData)
-                     setKg("")
-                     setRep("")
-                     setSet("")
-                     setDate("")
+                     getData().then((data) => {
+                        // Add new data
+                        if(date in data){
+                          data[date].push(newData)
+                        } else {
+                          data[date] = [newData]
+                        }
+
+                        storeData(data)
+                        let today = new Date()
+                        let today_str = `${today.getMonth()+1}/${today.getDate()}/${today.getFullYear()}`
+                        setTodayData(data[today_str])
+
+                        // Reload chart
+                        loadChartData(data)
+
+                        // Reset input state
+                        setKg("")
+                        setRep("")
+                        setSet("")
+                        setDate("")
+                     })
                    }}
                    />
 
@@ -157,7 +221,8 @@ const InputScreen = ({route, navigation }) => {
                 data={data}
                 width={500}
                 height={320}
-                yAxisLabel="KG: "
+                //yAxisLabel="KG: "
+                fromZero={true}
                 style={{backgroundColor:"#fff"}}
                 chartConfig={chartConfig}
                 verticalLabelRotation={0}

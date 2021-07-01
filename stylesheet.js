@@ -30,6 +30,15 @@ const styles = StyleSheet.create({
   },
   graphContainer: {
     paddingHorizontal: 200
+  },
+  signUpBtn: {
+    color: 'blue',
+    marginTop: 5,
+    padding: 5,
+  },
+  alert: {
+    color: 'red',
+    marginTop: 5,
   }
 
 });
