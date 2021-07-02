@@ -20,30 +20,29 @@ const styles = StyleSheet.create({
   container: {
     flexDirection:'row',
     alignItems: 'center',
-    marginTop:10,
-    marginHorizontal: 30,
-    padding:10,
+    padding:5,
+    width: "100%",
   },
 
   text: {
-    fontSize: 20,
+    fontSize: 18,
     paddingHorizontal: 5,
     textAlign: 'center'
   },
   date: {
-    width: 100
+    width: "30%",
   },
   kg: {
-    width: 60
+    width: "15%",
   },
   rep: {
-    width: 60
+    width: "15%",
   },
   set: {
-    width: 60
+    width: "15%",
   },
   volume: {
-    width: 200
+    width: "25%",
   }
 
 });

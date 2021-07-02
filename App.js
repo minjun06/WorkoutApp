@@ -18,11 +18,22 @@ const MyStack = () => {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{ title: 'Welcome to Workout Planner' }}
+          options={{ headerShown : false }}
         />
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Index" component={Index} />
-        <Stack.Screen name="Input" component={Input} />
+        <Stack.Screen 
+          name="Login" 
+          component={Login} 
+          />
+        <Stack.Screen 
+          name="Index" 
+          component={Index} 
+          options={{ title: 'Select Workout' }}
+          />
+        <Stack.Screen 
+          name="Input" 
+          component={Input} 
+          options={{ title: 'Workout' }}
+          />
         <Stack.Screen name="SignUp" component={SignUp} />
       </Stack.Navigator>
     </NavigationContainer>

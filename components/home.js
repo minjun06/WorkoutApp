@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from "react";
-import { Button, View, Text, TextInput, Image } from 'react-native';
+import { Button, View, Text, TextInput, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../stylesheet'
 
@@ -35,30 +35,117 @@ const HomeScreen = ({ navigation }) => {
   }
 
   return (
-    <View>
-      <Button
-        title="Select Workout"
-        onPress={() =>
-          navigation.navigate('Index')
-        }
-      />
+    <View style={homeStyles.screenContainer}>
+      <Image source={require('../assets/banner-min.jpg')} style={homeStyles.bannerImg} />
+      <View style={homeStyles.btnContainer}>
+        <Text style={homeStyles.helloTitle}>
+          Hello
+          {
+            username && ' ' + username 
+          }
+          !
+        </Text>
+        <Text style={homeStyles.helloText}>
+          Start your today's workout right now
+        </Text> 
+        <Text style={homeStyles.helloText}>
+          and note your workout list and check it
+        </Text> 
+        <TouchableOpacity 
+          style={homeStyles.selectBtn}
+          onPress={() => {
+            navigation.navigate('Index')
+          }}
+          >
+          <Text
+            style={homeStyles.selectBtnText}
+          >
+            Select Workout
+          </Text>
+        </TouchableOpacity>
 
-      <Button
-        title="Log In"
-        onPress={() =>
-          navigation.navigate('Login', {onSetUsername: setUsername})
-        }
-      />
+        <TouchableOpacity 
+          style={homeStyles.loginBtn}
+          onPress={() => {
+            navigation.navigate('Login', {onSetUsername: setUsername})
+          }}
+          >
+          <Text
+            style={homeStyles.loginBtnText}
+          >
+            Log In
+          </Text>
+        </TouchableOpacity>
 
-      <Text> </Text>
-      <Text style = {{textAlign: 'center', fontSize: 20}}>
-        {
-          username &&  <Text> Hello, {username} </Text>
-        }
-      </Text>
+      </View>
 
     </View>
   );
 };
+
+const homeStyles = StyleSheet.create({
+  screenContainer: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#fff',
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingVertical: "25%"
+  },
+  bannerImg: {
+    width: "80%",
+    height: "40%",
+    marginTop: "11%"
+
+  },
+  btnContainer: {
+    width: "100%",
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginTop: "5%",
+  },
+  helloTitle: {
+    fontSize: 30,
+    fontWeight: "600",
+    marginBottom: 15,
+  },
+  helloText: {
+    marginTop: 4,
+    fontSize: 15,
+    fontWeight: "500",
+    color: 'grey',
+    textAlign: "center",
+  },
+  selectBtn: {
+    marginTop: 50,
+    width: "70%",
+    height: 45,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#484BF4',
+    borderRadius: 5,
+  },
+  selectBtnText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#fff'
+  },
+  loginBtn: {
+    marginTop: 20,
+    width: "70%",
+    height: 45,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    borderColor: '#484BF4',
+    borderWidth: 3,
+    borderRadius: 5,
+  },
+  loginBtnText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#484BF4'
+  },
+});
 
 export default HomeScreen
